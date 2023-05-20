@@ -6,7 +6,7 @@ import com.kyc.core.model.web.MessageData;
 import com.kyc.core.model.web.RequestData;
 import com.kyc.core.model.web.ResponseData;
 import com.kyc.core.util.DateUtil;
-import com.kyc.core.util.GeneralUtil;
+import com.kyc.tracking.documents.CustomerActionDocument;
 import com.kyc.tracking.documents.ExecutiveTrackDocument;
 import com.kyc.tracking.mappers.ExecutiveActionMapper;
 import com.kyc.tracking.mappers.ExecutiveTrackMapper;
@@ -14,21 +14,18 @@ import com.kyc.tracking.model.ExecutiveAction;
 import com.kyc.tracking.model.ExecutiveTrackInfo;
 import com.kyc.tracking.repository.ExecutiveTrackRepository;
 import com.kyc.tracking.repository.MongoBsonOperationRepository;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.bson.types.ObjectId;
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.kyc.core.util.GeneralUtil.convertOrNull;
 
@@ -54,8 +51,16 @@ public class ExecutiveTrackingService {
         Map<String,String> queryParams = req.getQueryParams();
         Integer idExecutive = Integer.parseInt(queryParams.get("idExecutive"));
         Integer idOffice = convertOrNull(queryParams.get("idOffice"),Integer.class);
-        Date startDate = DateUtil.stringToDate(queryParams.get("startDate"));
+        Date startDate =DateUtil.stringToDate(queryParams.get("startDate"));
         Date endDate = DateUtil.stringToDate(queryParams.get("endDate"));
+
+        boolean cond1 = Objects.nonNull(startDate);
+        boolean cond2 = Objects.nonNull(endDate);
+
+        if( !(BooleanUtils.and(new boolean[]{cond1,cond2}) && endDate.after(startDate)) ){
+            startDate=null;
+            endDate=null;
+        }
 
         return mongoBsonOperationRepository.getExecutiveInfo(idExecutive,idOffice,startDate,endDate)
                 .map(executiveTrackMapper::toModel)
@@ -90,6 +95,8 @@ public class ExecutiveTrackingService {
                 })
                 .switchIfEmpty(sendError());
     }
+
+
 
     private <T> Mono<T> sendError(){
 

@@ -16,6 +16,9 @@
     <logger name="com.kyc" level="INFO" additivity="false">
         <appender-ref ref="ASYNC" />
     </logger>
+    <logger name="org.springframework.data.mongodb.core" level="DEBUG" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
     <root level="INFO" additivity="false">
         <appender-ref ref="ASYNC" />
     </root>
