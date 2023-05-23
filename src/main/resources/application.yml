@@ -8,3 +8,19 @@ spring:
 
 server:
   port: 9006
+
+kyc-messages:
+  catalog:
+    messages:
+      "001":
+        code: KYC-TRACKING-001
+        message: Unexpected Error
+        type: ERROR
+      "002":
+        code: KYC-TRACKING-002
+        message: The Request is Invalid
+        type: ERROR
+      "003":
+        code: KYC-TRACKING-003
+        message: The service is currently unavailable
+        type: ERROR

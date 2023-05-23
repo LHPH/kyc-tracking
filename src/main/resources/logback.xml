@@ -9,8 +9,13 @@
         <maxFlushTime>5000</maxFlushTime>
         <neverBlock>true</neverBlock>
     </appender>
-
-    <logger name="org.springframework" level="DEBUG" additivity="false">
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <logger name="org.springframework.web.server.adapter" level="DEBUG" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <logger name="org.springframework.web.reactive" level="DEBUG" additivity="false">
         <appender-ref ref="ASYNC" />
     </logger>
     <logger name="com.kyc" level="INFO" additivity="false">

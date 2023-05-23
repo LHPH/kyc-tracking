@@ -5,6 +5,7 @@ import com.kyc.core.exception.KycRestException;
 import com.kyc.core.model.web.MessageData;
 import com.kyc.core.model.web.RequestData;
 import com.kyc.core.model.web.ResponseData;
+import com.kyc.core.properties.KycMessages;
 import com.kyc.core.util.DateUtil;
 import com.kyc.tracking.documents.CustomerActionDocument;
 import com.kyc.tracking.documents.ExecutiveTrackDocument;
@@ -28,6 +29,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.kyc.core.util.GeneralUtil.convertOrNull;
+import static com.kyc.core.util.ReactiveUtil.getReactiveError;
+import static com.kyc.core.util.ReactiveUtil.sendReactiveError;
+import static com.kyc.tracking.constants.AppConstants.MESSAGE_002;
+import static com.kyc.tracking.constants.AppConstants.MESSAGE_003;
 
 @Service
 public class ExecutiveTrackingService {
@@ -45,6 +50,9 @@ public class ExecutiveTrackingService {
 
     @Autowired
     private ExecutiveActionMapper executiveActionMapper;
+
+    @Autowired
+    private KycMessages kycMessages;
 
     public Mono<ResponseData<List<ExecutiveTrackInfo>>> getExecutiveTrack(RequestData<Void> req){
 
@@ -64,6 +72,7 @@ public class ExecutiveTrackingService {
 
         return mongoBsonOperationRepository.getExecutiveInfo(idExecutive,idOffice,startDate,endDate)
                 .map(executiveTrackMapper::toModel)
+                .onErrorMap(exc -> getReactiveError(exc, HttpStatus.SERVICE_UNAVAILABLE,kycMessages.getMessage(MESSAGE_003),req))
                 .collectList()
                 .doOnNext(list -> LOGGER.info("Retrieved {}",list.size()))
                 .flatMap(list -> Mono.just(ResponseData.of(list)));
@@ -76,7 +85,8 @@ public class ExecutiveTrackingService {
 
         return executiveTrackRepository.save(doc)
                 .doOnNext(d -> LOGGER.info("{}",d.getId()))
-                .map(d -> ResponseData.of(d.getId().toString()));
+                .map(d -> ResponseData.of(d.getId().toString()))
+                .onErrorMap(exc -> getReactiveError(exc, HttpStatus.SERVICE_UNAVAILABLE,kycMessages.getMessage(MESSAGE_003),req));
     }
 
     public Mono<ResponseData<Boolean>> executiveTrackAction(RequestData<ExecutiveAction> request){
@@ -91,19 +101,10 @@ public class ExecutiveTrackingService {
                     element.getActions().add(executiveActionMapper.toNestedDocument(body));
                     return executiveTrackRepository.addAction(id,executiveActionMapper.toNestedDocument(body))
                             .doOnNext(d -> LOGGER.info("count {}",d))
-                            .map(d -> ResponseData.of(true));
+                            .map(d -> ResponseData.of(true))
+                            .onErrorMap(exc -> getReactiveError(exc, HttpStatus.SERVICE_UNAVAILABLE,kycMessages.getMessage(MESSAGE_003),request));
                 })
-                .switchIfEmpty(sendError());
+                .switchIfEmpty(sendReactiveError(null, HttpStatus.UNPROCESSABLE_ENTITY,kycMessages.getMessage(MESSAGE_002),request));
     }
 
-
-
-    private <T> Mono<T> sendError(){
-
-        KycRestException ex = KycRestException.builderRestException()
-                .errorData(new MessageData("CODE","MSG", MessageType.ERROR))
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .build();
-        return Mono.error(ex);
-    }
 }

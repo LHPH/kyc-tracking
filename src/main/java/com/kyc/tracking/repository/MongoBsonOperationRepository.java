@@ -2,9 +2,11 @@ package com.kyc.tracking.repository;
 
 import com.kyc.tracking.documents.CustomerActionDocument;
 import com.kyc.tracking.documents.ExecutiveTrackDocument;
-import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.InvalidMongoDbApiUsageException;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,6 +36,7 @@ public class MongoBsonOperationRepository {
         if(startDate!=null && endDate!=null){
             query.addCriteria(new Criteria("date").gte(startDate).lte(endDate));
         }
+
         return reactiveMongoTemplate.find(query, ExecutiveTrackDocument.class,"executives_track");
     }
 
@@ -49,10 +52,9 @@ public class MongoBsonOperationRepository {
                                                            Integer page){
 
         Query query = new Query();
-        Pageable pageable = Pageable.ofSize(10);
-        pageable.withPage(page);
+        Pageable pageable = PageRequest.of(page,10);
 
-        query.with(Pageable.ofSize(10));
+        query.with(pageable);
 
         if(customerNumber!=null){
             query.addCriteria(new Criteria("customerNumber").is(customerNumber));
