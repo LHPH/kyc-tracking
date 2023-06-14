@@ -97,14 +97,15 @@ public class ExecutiveTrackingService {
         String id = pathParams.get("id").toString();
 
         return executiveTrackRepository.findById(id)
+                .onErrorMap(exc -> getReactiveError(exc, HttpStatus.SERVICE_UNAVAILABLE,kycMessages.getMessage(MESSAGE_003),request))
                 .flatMap(element -> {
-                    element.getActions().add(executiveActionMapper.toNestedDocument(body));
+                    //element.getActions().add(executiveActionMapper.toNestedDocument(body));
                     return executiveTrackRepository.addAction(id,executiveActionMapper.toNestedDocument(body))
                             .doOnNext(d -> LOGGER.info("count {}",d))
                             .map(d -> ResponseData.of(true))
                             .onErrorMap(exc -> getReactiveError(exc, HttpStatus.SERVICE_UNAVAILABLE,kycMessages.getMessage(MESSAGE_003),request));
                 })
-                .switchIfEmpty(sendReactiveError(null, HttpStatus.UNPROCESSABLE_ENTITY,kycMessages.getMessage(MESSAGE_002),request));
+                .switchIfEmpty(Mono.defer(()->sendReactiveError(null, HttpStatus.UNPROCESSABLE_ENTITY,kycMessages.getMessage(MESSAGE_002),request)));
     }
 
 }

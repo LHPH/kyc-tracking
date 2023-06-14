@@ -1,4 +1,4 @@
-package com.kyc.tracking.configuration;
+package com.kyc.tracking.config;
 
 import com.kyc.core.config.BuildDetailConfig;
 import com.kyc.core.exception.handlers.KycGenericRestExceptionHandler;
@@ -21,7 +21,7 @@ public class GeneralConfig {
         return new KycUnhandledExceptionHandler(kycMessages.getMessage(MESSAGE_001));
     }
 
-   @Bean
+   //@Bean
     public KycValidationRestExceptionHandler kycValidationRestExceptionHandler(KycMessages kycMessages){
         return new KycValidationRestExceptionHandler(kycMessages.getMessage(MESSAGE_002));
     }
