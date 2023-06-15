@@ -3,9 +3,7 @@ package com.kyc.tracking.documents;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.io.Serializable;

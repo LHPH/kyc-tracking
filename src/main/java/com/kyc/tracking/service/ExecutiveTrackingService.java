@@ -1,13 +1,9 @@
 package com.kyc.tracking.service;
 
-import com.kyc.core.enums.MessageType;
-import com.kyc.core.exception.KycRestException;
-import com.kyc.core.model.web.MessageData;
 import com.kyc.core.model.web.RequestData;
 import com.kyc.core.model.web.ResponseData;
 import com.kyc.core.properties.KycMessages;
 import com.kyc.core.util.DateUtil;
-import com.kyc.tracking.documents.CustomerActionDocument;
 import com.kyc.tracking.documents.ExecutiveTrackDocument;
 import com.kyc.tracking.mappers.ExecutiveActionMapper;
 import com.kyc.tracking.mappers.ExecutiveTrackMapper;

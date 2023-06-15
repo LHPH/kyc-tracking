@@ -19,7 +19,6 @@ import java.util.Map;
 
 import static com.kyc.core.util.GeneralUtil.convertOrNull;
 import static com.kyc.core.util.ReactiveUtil.getReactiveError;
-import static com.kyc.core.util.ReactiveUtil.sendReactiveError;
 import static com.kyc.tracking.constants.AppConstants.MESSAGE_003;
 
 @Service

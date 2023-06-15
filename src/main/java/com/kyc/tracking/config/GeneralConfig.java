@@ -4,7 +4,6 @@ import com.kyc.core.config.BuildDetailConfig;
 import com.kyc.core.exception.handlers.KycGenericRestExceptionHandler;
 import com.kyc.core.exception.handlers.KycUnhandledExceptionHandler;
 import com.kyc.core.exception.handlers.KycValidationReactiveRestExceptionHandler;
-import com.kyc.core.exception.handlers.KycValidationRestExceptionHandler;
 import com.kyc.core.properties.KycMessages;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
