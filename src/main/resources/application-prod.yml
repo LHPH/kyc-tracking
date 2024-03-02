@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      host: ${kyc.config.database.mongodb.host}
+      port: ${kyc.config.database.mongodb.port}
+      username: ${kyc.config.database.mongodb.username}
+      password: ${kyc.config.database.mongodb.secret}
+      database: kyc_database
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    preferIpAddress: true
+  client:
+    enabled: true
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${kyc.config.hostname}:9100/eureka
+
+logging:
+  file:
+    name: /opt/kyc/logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: /opt/kyc/logs/${spring.application.name}/%d{yyyy-MM-dd}.%i.log.gz
+      max-file-size: 50MB
+      max-history: 30
