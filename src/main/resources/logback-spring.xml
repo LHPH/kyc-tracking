@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	<include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+	
+	<springProfile name="dev">
+        
+		<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="CONSOLE"/>
+			<queueSize>10000</queueSize>
+			<maxFlushTime>5000</maxFlushTime>
+			<neverBlock>true</neverBlock>
+		</appender>
+	
+		<logger name="org.springframework" level="INFO" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="org.springframework.web.server.adapter" level="DEBUG" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="org.springframework.web.reactive" level="DEBUG" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="com.kyc" level="INFO" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="org.springframework.data.mongodb.core" level="DEBUG" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<root level="INFO" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</root>
+		
+    </springProfile>
+	
+	<springProfile name="prod">
+		
+		<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="CONSOLE"/>
+			<appender-ref ref="FILE" />
+			<queueSize>10000</queueSize>
+			<maxFlushTime>5000</maxFlushTime>
+			<neverBlock>true</neverBlock>
+		</appender>
+		
+		<logger name="org.springframework" level="INFO" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="org.springframework.web.server.adapter" level="DEBUG" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="org.springframework.web.reactive" level="DEBUG" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="com.kyc" level="INFO" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<logger name="org.springframework.data.mongodb.core" level="DEBUG" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</logger>
+		
+		<root level="INFO" additivity="false">
+			<appender-ref ref="ASYNC" />
+		</root>
+	
+	</springProfile>
+	
+</configuration>
