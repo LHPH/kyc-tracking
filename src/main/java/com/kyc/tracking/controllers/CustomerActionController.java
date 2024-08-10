@@ -5,6 +5,7 @@ import com.kyc.core.model.web.ResponseData;
 import com.kyc.core.util.GeneralUtil;
 import com.kyc.tracking.controllers.delegate.CustomerActionDelegate;
 import com.kyc.tracking.model.CustomerAction;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
