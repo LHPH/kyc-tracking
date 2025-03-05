@@ -13,7 +13,6 @@ eureka:
     preferIpAddress: true
   client:
     enabled: true
-    fetchRegistry: false
     serviceUrl:
       defaultZone: http://${kyc.config.hostname}:9100/eureka
 
@@ -24,4 +23,4 @@ logging:
     rollingpolicy:
       file-name-pattern: /opt/kyc/logs/${spring.application.name}/%d{yyyy-MM-dd}.%i.log.gz
       max-file-size: 50MB
-      max-history: 30
+      max-history: 3
