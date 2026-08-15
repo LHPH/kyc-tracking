@@ -1,11 +1,10 @@
 spring:
-  data:
-    mongodb:
-      host: ${kyc.config.database.mongodb.host}
-      port: ${kyc.config.database.mongodb.port}
-      username: ${kyc.config.database.mongodb.username}
-      password: ${kyc.config.database.mongodb.secret}
-      database: kyc_database
+  mongodb:
+    host: ${kyc.config.database.mongodb.host}
+    port: ${kyc.config.database.mongodb.port}
+    username: ${kyc.config.database.mongodb.username}
+    password: ${kyc.config.database.mongodb.secret}
+    database: kyc_database
 
 eureka:
   instance:

@@ -1,11 +1,10 @@
 spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      username: kyc_user
-      password: kyc_pass
-      database: kyc_database
+  mongodb:
+    username: kyc_user
+    host: localhost
+    port: 27017
+    password: kyc_pass
+    database: kyc_database
 
 eureka:
   client:
